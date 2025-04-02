@@ -1,0 +1,53 @@
+{
+    "listings": [
+      {
+        "id": "job12345",
+        "title": "Senior Data Scientist",
+        "company": "Tech Innovations Inc.",
+        "location": "Paris, France",
+        "date_posted": "2025-03-20T00:00:00Z",
+        "apply_url": "https://www.linkedin.com/jobs/view/senior-data-scientist",
+        "description": "We are looking for a Senior Data Scientist to join our growing team. You will develop machine learning models and extract valuable insights from large datasets.",
+        "required_skills": ["Python", "Machine Learning", "SQL", "Data Visualization", "Statistics"],
+        "preferred_skills": ["AWS", "Spark", "Docker", "Deep Learning"],
+        "qualifications": [
+          "Master's degree in Computer Science, Statistics, or related field",
+          "5+ years of experience in data science roles",
+          "Strong programming skills in Python and SQL",
+          "Experience with machine learning frameworks like TensorFlow or PyTorch"
+        ],
+        "experience_required": "5+ years of experience in data science roles",
+        "education_required": "Master's degree in Computer Science, Statistics, or related field",
+        "salary_range": {
+          "min": 80000,
+          "max": 120000,
+          "currency": "EUR"
+        }
+      },
+      {
+        "id": "job12346",
+        "title": "Software Engineer",
+        "company": "Global Software Solutions",
+        "location": "Paris, France",
+        "date_posted": "2025-03-18T00:00:00Z",
+        "apply_url": "https://www.linkedin.com/jobs/view/software-engineer",
+        "description": "We're seeking a talented Software Engineer to develop high-quality applications. You'll be responsible for designing, coding, and modifying applications according to specifications.",
+        "required_skills": ["Java", "JavaScript", "REST APIs", "Git", "Agile"],
+        "preferred_skills": ["Spring Boot", "React", "Docker", "Kubernetes"],
+        "qualifications": [
+          "Bachelor's degree in Computer Science or related field",
+          "2+ years of software development experience",
+          "Experience with modern development frameworks",
+          "Knowledge of database systems"
+        ],
+        "experience_required": "2+ years of software development experience",
+        "education_required": "Bachelor's degree in Computer Science or related field",
+        "salary_range": {
+          "min": 60000,
+          "max": 90000,
+          "currency": "EUR"
+        }
+      }
+    ]
+  }
+  

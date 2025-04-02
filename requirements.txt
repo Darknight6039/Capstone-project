@@ -1,0 +1,12 @@
+streamlit==1.28.0
+PyPDF2==3.0.1
+python-docx==0.8.11
+lxml>=2.3.2  # Dependency for python-docx
+spacy==3.7.2
+# Install spaCy model separately with: python -m spacy download en_core_web_md
+plotly==5.18.0
+openai==1.6.0
+numpy==1.26.0
+pandas==2.1.1
+requests==2.31.0
+python-dotenv==1.0.0

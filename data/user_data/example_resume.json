@@ -1,0 +1,102 @@
+{
+    "user_id": "user12345",
+    "timestamp": "2025-03-15T14:30:00Z",
+    "personal_info": {
+      "name": "Example User",
+      "email": "example@email.com",
+      "phone": "+123456789",
+      "location": "Paris, France"
+    },
+    "skills": [
+      {
+        "skill": "Python",
+        "years_experience": 3,
+        "proficiency": "Advanced",
+        "confidence": 0.9
+      },
+      {
+        "skill": "Machine Learning",
+        "years_experience": 2,
+        "proficiency": "Intermediate",
+        "confidence": 0.8
+      },
+      {
+        "skill": "SQL",
+        "years_experience": 4,
+        "proficiency": "Advanced",
+        "confidence": 0.95
+      },
+      {
+        "skill": "Communication",
+        "years_experience": 5,
+        "proficiency": "Advanced",
+        "confidence": 0.85
+      }
+    ],
+    "education": [
+      {
+        "degree": "Master's",
+        "field": "Computer Science",
+        "institution": "SKEMA Business School",
+        "location": "Paris, France",
+        "graduation_date": "2024-06",
+        "gpa": "3.8/4.0"
+      },
+      {
+        "degree": "Bachelor's",
+        "field": "Computer Engineering",
+        "institution": "University of Technology",
+        "location": "Lyon, France",
+        "graduation_date": "2022-06",
+        "gpa": "3.7/4.0"
+      }
+    ],
+    "experience": [
+      {
+        "title": "Data Scientist Intern",
+        "company": "Tech Innovations Inc.",
+        "location": "Paris, France",
+        "start_date": "2023-06",
+        "end_date": "2024-01",
+        "description": "Developed machine learning models for product recommendation systems. Improved conversion rates by 15% through data-driven optimization."
+      },
+      {
+        "title": "Software Engineering Intern",
+        "company": "Global Software Solutions",
+        "location": "Lyon, France",
+        "start_date": "2022-06",
+        "end_date": "2022-12",
+        "description": "Implemented backend features using Python and Django. Contributed to the development of RESTful APIs for mobile applications."
+      }
+    ],
+    "analyzed_data": {
+      "top_skills": ["Python", "SQL", "Machine Learning"],
+      "skill_gaps": ["Docker", "Cloud Computing", "React"],
+      "recommended_jobs": ["Data Scientist", "Data Analyst", "Machine Learning Engineer"],
+      "career_path_suggestions": [
+        {
+          "path": "Data Science",
+          "match_score": 0.85,
+          "next_steps": ["Gain experience with cloud platforms", "Build portfolio of ML projects"]
+        },
+        {
+          "path": "Software Engineering",
+          "match_score": 0.72,
+          "next_steps": ["Learn web frameworks", "Develop full-stack applications"]
+        }
+      ]
+    },
+    "interaction_history": [
+      {
+        "timestamp": "2025-03-15T14:35:00Z",
+        "query": "What jobs match my skills?",
+        "response": "Based on your skills in Python, Machine Learning, and SQL, you're well-suited for roles like Data Scientist, Data Analyst, or Machine Learning Engineer. Would you like more information about any of these roles?"
+      },
+      {
+        "timestamp": "2025-03-15T14:37:00Z",
+        "query": "How can I improve my resume for data scientist positions?",
+        "response": "To strengthen your resume for Data Scientist positions, consider: 1) Adding quantifiable achievements to your experience section, 2) Highlighting specific ML projects you've completed, 3) Adding experience with cloud platforms like AWS or GCP, and 4) Including any relevant certifications in data science or machine learning."
+      }
+    ]
+  }
+  

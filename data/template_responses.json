@@ -1,0 +1,33 @@
+{
+    "greetings": [
+      "Hello! I'm your Career Guidance Assistant. How can I help you today?",
+      "Welcome! I'm here to help with your career questions and provide personalized guidance.",
+      "Hi there! I'm your AI career advisor. What would you like to know about jobs or your career path?"
+    ],
+    "resume_feedback": [
+      "Based on my analysis of your resume, here are some improvement suggestions: {suggestions}",
+      "I've reviewed your resume and have {suggestion_count} recommendations to make it stronger for {job_type} positions: {suggestions}",
+      "After analyzing your resume against current job market trends, here's what I recommend improving: {suggestions}"
+    ],
+    "job_match_responses": [
+      "Based on your skills and experience, you're a {match_score}% match for this {job_title} position. {strength_comment}",
+      "I've analyzed your profile against this {job_title} role, and you have a {match_score}% compatibility. {gap_comment}",
+      "Your profile shows a {match_score}% match with this {job_title} job. Key strengths: {strengths}. Areas to develop: {weaknesses}."
+    ],
+    "skill_gap_explanations": [
+      "The most important skills you're missing for this role are {missing_skills}. Developing these would significantly improve your chances.",
+      "To increase your match score for {job_title} positions, focus on developing these key skills: {missing_skills}.",
+      "There's a gap between your current skills and what's required for this role. Consider learning: {missing_skills}."
+    ],
+    "career_advice": [
+      "Based on your background in {background_field}, a logical next step could be {next_role}. This would utilize your {strengths} while providing growth in {growth_areas}.",
+      "With your experience in {current_role}, you might consider transitioning to {suggested_role}, which has a growing demand and leverages your {relevant_skills}.",
+      "Your skill set is well-aligned with the {industry} industry, where roles like {suggested_roles} are showing strong growth. These positions would build on your strengths in {strengths}."
+    ],
+    "fallback_responses": [
+      "I'm not sure I understood that correctly. Could you rephrase your question?",
+      "I'd like to help with that, but I need a bit more information. Could you elaborate?",
+      "I'm still learning and don't have enough information to answer that properly. Could you try asking in a different way?"
+    ]
+  }
+  

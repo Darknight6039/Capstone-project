@@ -1,0 +1,151 @@
+{
+    "technical_skills": [
+      {
+        "name": "Python",
+        "category": "Programming Language",
+        "popularity": 0.95,
+        "variants": ["python", "python3", "py"]
+      },
+      {
+        "name": "JavaScript",
+        "category": "Programming Language",
+        "popularity": 0.92,
+        "variants": ["js", "javascript", "ecmascript"]
+      },
+      {
+        "name": "Java",
+        "category": "Programming Language",
+        "popularity": 0.89,
+        "variants": ["java", "java programming"]
+      },
+      {
+        "name": "SQL",
+        "category": "Database",
+        "popularity": 0.88,
+        "variants": ["mysql", "postgresql", "sql server", "database programming"]
+      },
+      {
+        "name": "Machine Learning",
+        "category": "Data Science",
+        "popularity": 0.85,
+        "variants": ["ml", "machine learning algorithms", "supervised learning", "unsupervised learning"]
+      },
+      {
+        "name": "Natural Language Processing",
+        "category": "Data Science",
+        "popularity": 0.82,
+        "variants": ["nlp", "text processing", "language understanding"]
+      },
+      {
+        "name": "Docker",
+        "category": "DevOps",
+        "popularity": 0.80,
+        "variants": ["containerization", "docker containers"]
+      },
+      {
+        "name": "AWS",
+        "category": "Cloud Computing",
+        "popularity": 0.86,
+        "variants": ["amazon web services", "ec2", "s3", "lambda"]
+      },
+      {
+        "name": "React",
+        "category": "Frontend Framework",
+        "popularity": 0.84,
+        "variants": ["reactjs", "react.js", "react native"]
+      },
+      {
+        "name": "Node.js",
+        "category": "Backend Framework",
+        "popularity": 0.82,
+        "variants": ["nodejs", "node"]
+      }
+    ],
+    "soft_skills": [
+      {
+        "name": "Communication",
+        "category": "Interpersonal",
+        "popularity": 0.95,
+        "variants": ["verbal communication", "written communication", "presentation skills"]
+      },
+      {
+        "name": "Teamwork",
+        "category": "Interpersonal",
+        "popularity": 0.93,
+        "variants": ["collaboration", "team player", "cooperation"]
+      },
+      {
+        "name": "Problem Solving",
+        "category": "Cognitive",
+        "popularity": 0.92,
+        "variants": ["analytical thinking", "critical thinking", "troubleshooting"]
+      },
+      {
+        "name": "Leadership",
+        "category": "Management",
+        "popularity": 0.85,
+        "variants": ["team leadership", "people management", "directing"]
+      },
+      {
+        "name": "Time Management",
+        "category": "Organization",
+        "popularity": 0.88,
+        "variants": ["scheduling", "prioritization", "deadline management"]
+      }
+    ],
+    "job_titles": [
+      {
+        "title": "Data Scientist",
+        "related_skills": ["Python", "Machine Learning", "SQL", "Statistics", "Data Visualization"],
+        "education": ["Computer Science", "Statistics", "Mathematics"],
+        "industry": "Technology"
+      },
+      {
+        "title": "Software Engineer",
+        "related_skills": ["Java", "JavaScript", "Python", "SQL", "Git", "Docker"],
+        "education": ["Computer Science", "Software Engineering"],
+        "industry": "Technology"
+      },
+      {
+        "title": "UX Designer",
+        "related_skills": ["User Research", "Wireframing", "Prototyping", "Adobe XD", "Figma"],
+        "education": ["Design", "Human-Computer Interaction", "Psychology"],
+        "industry": "Technology"
+      },
+      {
+        "title": "Project Manager",
+        "related_skills": ["Leadership", "Communication", "Time Management", "Risk Management", "Agile"],
+        "education": ["Business", "Management", "Engineering"],
+        "industry": "Various"
+      },
+      {
+        "title": "Marketing Specialist",
+        "related_skills": ["Social Media Marketing", "Content Creation", "SEO", "Analytics", "Communication"],
+        "education": ["Marketing", "Communications", "Business"],
+        "industry": "Various"
+      }
+    ],
+    "industries": [
+      {
+        "name": "Technology",
+        "growth_rate": 0.15,
+        "top_skills": ["Python", "JavaScript", "Machine Learning", "Cloud Computing", "Cybersecurity"]
+      },
+      {
+        "name": "Healthcare",
+        "growth_rate": 0.12,
+        "top_skills": ["Medical Terminology", "Electronic Health Records", "Patient Care", "Healthcare Regulations"]
+      },
+      {
+        "name": "Finance",
+        "growth_rate": 0.08,
+        "top_skills": ["Financial Analysis", "Risk Management", "Accounting", "Banking", "Investment Analysis"]
+      },
+      {
+        "name": "Education",
+        "growth_rate": 0.06,
+        "top_skills": ["Teaching", "Curriculum Development", "Educational Technology", "Student Assessment"]
+      }
+    ]
+  }
+  
