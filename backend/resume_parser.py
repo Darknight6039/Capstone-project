@@ -1,17 +1,13 @@
-# backend/resume_parser.py
-
-from backend.openai_client import get_openai_client
 import json
-import streamlit as st
 import re
+import streamlit as st
+from backend.openai_client import get_openai_client
 
 class ResumeParser:
     def __init__(self):
-        """
-        Initialize the resume parser.
-        """
+        """Initialize the resume parser."""
         self.client = get_openai_client()
-    
+
     def parse_resume(self, resume_text):
         """
         Parse a resume using OpenAI.
@@ -20,80 +16,87 @@ class ResumeParser:
             resume_text (str): The text content of the resume
             
         Returns:
-            dict: Structured resume information
+            str: JSON string containing structured resume information
         """
-        response = self.client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": """
-                You are a resume parsing expert. Extract the following information from the resume into VALID JSON format:
-                
-                {
-                  "personal_info": {"name": "", "email": "", "phone": "", "linkedin": ""},
-                  "skills": ["skill1", "skill2", ...],
-                  "experience": [{"company": "", "title": "", "duration": "", "description": ""}],
-                  "education": [{"institution": "", "degree": "", "field": "", "year": ""}],
-                  "languages": [{"language": "", "proficiency": ""}],
-                  "certifications": ["cert1", "cert2", ...]
-                }
-                
-                IMPORTANT: Return ONLY valid JSON with no explanations or additional text. Ensure all fields are present even if empty.
-                """},
-                {"role": "user", "content": resume_text}
-            ],
-            temperature=0.1  # Lower temperature for more structured output
-        )  # Added missing closing parenthesis
-        
-        # Process and return the parsed resume data
-        return response.choices[0].message.content
-    
+        try:
+            response = self.client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": """
+                    You are a resume parsing expert. Extract structured information from this resume into VALID JSON format:
+                    
+                    {
+                      "personal_info": {"name": "", "email": "", "phone": "", "linkedin": ""},
+                      "skills": ["skill1", "skill2"],
+                      "experience": [{"company": "", "title": "", "duration": "", "description": ""}],
+                      "education": [{"institution": "", "degree": "", "field": "", "year": ""}],
+                      "languages": [{"language": "", "proficiency": ""}],
+                      "certifications": []
+                    }
+                    
+                    IMPORTANT: Return ONLY valid JSON with no explanations or additional text.
+                    """},
+                    {"role": "user", "content": resume_text}
+                ],
+                temperature=0.1  # Lower temperature for more structured output
+            )
+            return response.choices[0].message.content
+        except Exception as e:
+            st.error(f"Error calling OpenAI API: {str(e)}")
+            return json.dumps(self._create_empty_structure())
+
     def parse_document(self, resume_text, file_path=None):
         """
-        Alias for parse_resume
+        Parse resume document and extract structured information.
         
         Args:
             resume_text (str): The text content of the resume
-            file_path (str, optional): Path to the resume file (ignored)
             
         Returns:
             dict: Structured resume information
         """
-        result = self.parse_resume(resume_text)
-        
         try:
-            # Try to clean the result before parsing JSON
-            # Sometimes GPT adds explanations before/after the JSON
-            if isinstance(result, str):
-                # Try to find JSON block
-                json_match = re.search(r'({[\s\S]*})', result)
-                if json_match:
-                    result = json_match.group(1)
-                parsed_data = json.loads(result)
-            else:
-                parsed_data = result
+            raw_result = self.parse_resume(resume_text)
+            cleaned_json = self._clean_json_response(raw_result)
+            parsed_data = json.loads(cleaned_json)
             
-            # Store in session state
             st.session_state.resume_data = parsed_data
             
-            # Update conversation context with new resume data
-            try:
-                from backend.conversation import ChatbotConversation
-                conversation = ChatbotConversation()
-                conversation.update_resume_context(parsed_data)
-            except ImportError:
-                # Handle case where ChatbotConversation might not be available yet
-                pass
-            
             return parsed_data
+            
         except Exception as e:
-            print(f"JSON parsing error: {str(e)}")
-            print(f"Raw content: {result}")
-            # Create a basic structured format to prevent display errors
-            raw_result = {
-                "raw_content": result,
-                "error": str(e),
-                "skills": ["Parsing Failed"],
-                "experience": [{"title": "Parsing Failed", "company": "Please try again", "duration": ""}]
-            }
-            st.session_state.resume_data = raw_result
-            return raw_result
+            st.error(f"Error processing resume: {str(e)}")
+            return self._create_empty_structure()
+
+    def _clean_json_response(self, text):
+        """
+        Clean the JSON response to handle special objects and formatting issues.
+        
+        Args:
+            text (str): Raw JSON text from API
+            
+        Returns:
+            str: Cleaned JSON string
+        """
+        if not isinstance(text, str):
+            return json.dumps(self._create_empty_structure())
+            
+        text = re.sub(r'\[\s*\.\.\.\s*\]', '[]', text)  # Replace [...] with []
+        text = re.sub(r'"\.\.\."|\'\.\.\.\'', '""', text)  # Replace ellipsis with empty strings
+        
+        json_match = re.search(r'({[\s\S]*})', text)
+        if json_match:
+            text = json_match.group(1)
+            
+        return text
+
+    def _create_empty_structure(self):
+        """Create a fallback empty structure."""
+        return {
+            "personal_info": {"name": "", "email": "", "phone": "", "linkedin": ""},
+            "skills": ["Erreur d'analyse"],
+            "experience": [{"company": "Erreur technique", "title": "Veuillez réessayer"}],
+            "education": [],
+            "languages": [],
+            "certifications": []
+        }

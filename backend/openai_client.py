@@ -1,20 +1,18 @@
-# backend/openai_client.py
-
 import os
-from openai import OpenAI
 from dotenv import load_dotenv
+import streamlit as st
 
-# Load environment variables
-load_dotenv()
+import streamlit as st
 
-# Get API key from environment variables
-api_key = os.getenv("OPENAI_API_KEY")
-if not api_key:
-    raise ValueError("OPENAI_API_KEY environment variable is not set")
-
-# Create a single client instance
-client = OpenAI(api_key=api_key)
-
-# Simple function to get the client
 def get_openai_client():
-    return client
+    """Initialize and return the OpenAI client."""
+    if "openai" in st.secrets:
+        # Load API key from Streamlit secrets
+        api_key = st.secrets["openai"]["api_key"]
+    else:
+        raise ValueError("OpenAI API key not found in Streamlit secrets.")
+    
+    # Set up OpenAI client
+    import openai
+    openai.api_key = api_key
+    return openai

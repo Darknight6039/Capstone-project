@@ -1,52 +1,58 @@
 import streamlit as st
 import asyncio
 from backend.arbeitnow import ArbeitnowJobFetcher
-from backend.matcher import JobMatcher
+from backend.hybrid_matcher import HybridJobMatcher
 from frontend.components.job_card import JobCard
 
 def show_job_matches():
     st.title("Job Matches")
     
-    # Job search parameters - Removed location as requested
-    keywords = st.text_input("Job Title/Keywords", "Data Scientist")
+    # Job search parameters
+    col1, col2 = st.columns(2)
+    with col1:
+        keywords = st.text_input("Job Title/Keywords", "Data Scientist")
+    with col2:
+        experience_level = st.select_slider(
+            "Experience Level",
+            options=["Entry", "Associate", "Mid-Senior", "Director", "Executive"]
+        )
     
-    experience_level = st.select_slider(
-        "Experience Level",
-        options=["Entry", "Associate", "Mid-Senior", "Director", "Executive"]
-    )
-    
-    # Language filter to ensure proper results
+    # Language filter
     language = st.selectbox("Language", ["English", "German", "French", "Any"])
 
     # Search button
     search_clicked = st.button("Search Jobs", type="primary")
     
-    # Condition to display results
-    if search_clicked or len(st.session_state.job_matches) > 0:
-        # Retrieve new jobs only if a search is requested
+    # Display results
+    if search_clicked or "job_matches" in st.session_state:
         if search_clicked:
             with st.spinner("Searching for matching jobs..."):
-                # Fetch jobs from LinkedIn
+                # Fetch jobs
                 job_fetcher = ArbeitnowJobFetcher()
                 jobs = job_fetcher.search_jobs(
                     keywords=keywords,
-                    # location removed
                     experience_level=experience_level,
                     language=language
                 )
+                
+                if not jobs:
+                    st.error("No jobs found matching your criteria. Try different keywords.")
+                    return
 
-                # Match jobs with resume
-                matcher = JobMatcher()
+                # Use hybrid matcher
+                matcher = HybridJobMatcher()
                 matched_jobs = []
                 
-                # Use asyncio to run matching in parallel
+                # Process matches in parallel
                 async def process_matches():
                     tasks = []
                     for job in jobs:
-                        task = asyncio.create_task(matcher.calculate_match_score(
-                            st.session_state.resume_data,
-                            job
-                        ))
+                        task = asyncio.create_task(
+                            matcher.calculate_match_score(
+                                st.session_state.resume_data,
+                                job
+                            )
+                        )
                         tasks.append((job, task))
                     
                     for job, task in tasks:
@@ -57,7 +63,7 @@ def show_job_matches():
                             "match_details": match_result["details"]
                         })
                 
-                # Run the async task
+                # Run matching
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
                 try:
@@ -65,14 +71,14 @@ def show_job_matches():
                 finally:
                     loop.close()
                 
-                # Sort by match score (descending)
+                # Sort by match score
                 matched_jobs.sort(key=lambda x: x["match_score"], reverse=True)
                 st.session_state.job_matches = matched_jobs
         
         # Display job matches
         st.subheader(f"Found {len(st.session_state.job_matches)} matching jobs")
         
-        # Filters
+        # Filter controls
         min_match = st.slider("Minimum Match Score", 0, 100, 50)
         filtered_jobs = [j for j in st.session_state.job_matches if j["match_score"] >= min_match]
         

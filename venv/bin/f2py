@@ -1,4 +1,4 @@
-#!/Users/isaiaebongue/Desktop/career_guidance_chatbot/venv/bin/python
+#!/Users/isaiaebongue/Desktop/career_guidance_chatbot_dev/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

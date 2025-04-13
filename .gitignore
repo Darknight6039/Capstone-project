@@ -1,0 +1,24 @@
+# Fichiers sensibles
+.env
+.streamlit/secrets.toml
+
+# Fichiers générés
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environnements virtuels
+venv/
+env/
+
+# Fichiers d'IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Fichiers de données
+*.csv
+*.json
+*.xlsx

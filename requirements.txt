@@ -1,12 +1,29 @@
-streamlit==1.28.0
+# Core Application
+streamlit==1.33.0
+python-dotenv==1.0.1
+
+# Document Processing
 PyPDF2==3.0.1
 python-docx==0.8.11
-lxml>=2.3.2  # Dependency for python-docx
-spacy==3.7.2
-# Install spaCy model separately with: python -m spacy download en_core_web_md
+pymupdf==1.23.9  # Faster PDF parsing
+
+# NLP Processing
+spacy==3.7.4
+# Install spaCy model with: python -m spacy download en_core_web_lg
+
+# AI/ML Components
+openai==1.55.3
+tqdm==4.66.2  # Progress bars
+
+# Data Handling
+pandas==2.2.1
+numpy==1.26.4
+
+# Visualization
 plotly==5.18.0
-openai==1.6.0
-numpy==1.26.0
-pandas==2.1.1
+
+# Networking
 requests==2.31.0
-python-dotenv==1.0.0
+docx2txt==0.9
+bs4==0.0.1
+watchdog==3.0.0  # File system monitoring

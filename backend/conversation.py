@@ -1,131 +1,185 @@
-# backend/conversation.py
-
 from backend.openai_client import get_openai_client
 import json
+import re
 
 class ChatbotConversation:
     def __init__(self):
         """
-        Initialize the chatbot conversation.
-        The OpenAI client is imported from a singleton instance.
+        Initialize the chatbot conversation with GPT-4o optimization
         """
         self.client = get_openai_client()
         self.conversation_history = []
         
-        # Add a system message to provide context
-        self.conversation_history.append({
-            "role": "system", 
-            "content": "You are a career assistant. Help users with job searching, career advice, and resume improvement. When resume data is provided, refer to it in your responses."
-        })
+        # Enhanced system prompt for career guidance
+        self.system_prompt = """You are CareerGPT, an expert AI career coach with access to:
+        1. User's resume data (skills, experience, education)
+        2. Current job market trends
+        3. Latest hiring practices
+        4. User's job match results
+        
+        Your capabilities:
+        - Analyze resume-job fit
+        - Suggest resume improvements
+        - Provide interview preparation tips
+        - Offer career path recommendations
+        - Explain match scores and skill gaps"""
+        
+        self.reset_conversation()
+        
+    def reset_conversation(self):
+        """Reset conversation while maintaining system context"""
+        self.conversation_history = [
+            {
+                "role": "system", 
+                "content": self.system_prompt
+            }
+        ]
         
     def update_resume_context(self, resume_data):
         """
-        Update the conversation with resume context
+        Update conversation with structured resume context
         
         Args:
-            resume_data (dict): The parsed resume data
+            resume_data (dict): Parsed resume data
         """
-        # Remove any previous resume context
-        self.conversation_history = [msg for msg in self.conversation_history 
-                                   if not msg.get("content", "").startswith("RESUME_DATA:")]
+        # Clear previous context
+        self.conversation_history = [
+            msg for msg in self.conversation_history 
+            if not msg.get("metadata") == "resume_context"
+        ]
         
-        # Add new resume context
         if resume_data:
-            resume_context = f"RESUME_DATA: {json.dumps(resume_data)}"
-            self.conversation_history.append({"role": "system", "content": resume_context})
-    
-    def generate_response(self, message):
+            # Structure resume data for GPT-4o
+            structured_resume = {
+                "skills": resume_data.get('skills', []),
+                "experience": [
+                    f"{exp.get('title', '')} at {exp.get('company', '')} ({exp.get('duration', '')})"
+                    for exp in resume_data.get('experience', [])[:3]
+                ],
+                "education": resume_data.get('education', []),
+                "certifications": resume_data.get('certifications', [])
+            }
+            
+            self.conversation_history.append({
+                "role": "system",
+                "content": f"RESUME_CONTEXT: {json.dumps(structured_resume)}",
+                "metadata": "resume_context"
+            })
+            
+    def _enhance_with_job_context(self, job_matches):
+        """Add job match context to conversation"""
+        if job_matches:
+            top_3_matches = [
+                f"{job['job_data']['title']} at {job['job_data']['company']} ({job['match_score']}% match)"
+                for job in job_matches[:3]
+            ]
+            return f"TOP JOB MATCHES: {', '.join(top_3_matches)}"
+        return ""
+
+    def generate_response(self, message, job_matches=None):
         """
-        Generate a response using the OpenAI API.
+        Generate response with GPT-4o optimizations
         
         Args:
-            message (str): The user message to respond to
+            message (str): User input
+            job_matches (list): List of job matches
             
         Returns:
-            str: The generated response
+            str: Formatted response
         """
-        # Add the message to the conversation history
-        self.conversation_history.append({"role": "user", "content": message})
-        
-        # Generate response using OpenAI API
-        response = self.client.chat.completions.create(
-            model="gpt-4-turbo",
-            messages=self.conversation_history
-        )
-        
-        # Extract and return the response text
-        assistant_message = response.choices[0].message.content
-        self.conversation_history.append({"role": "assistant", "content": assistant_message})
-        
-        return assistant_message
-    
-    # Method updated to support all necessary parameters
+        try:
+            # Prepare messages with context
+            messages = self.conversation_history.copy()
+            
+            # Add job context if available
+            if job_matches:
+                messages.append({
+                    "role": "system",
+                    "content": self._enhance_with_job_context(job_matches)
+                })
+                
+            messages.append({"role": "user", "content": message})
+            
+            response = self.client.chat.completions.create(
+                model="gpt-4o",
+                messages=messages,
+                temperature=0.7,
+                max_tokens=500,
+                top_p=0.9,
+                frequency_penalty=0.5,
+                presence_penalty=0.3
+            )
+            
+            # Process and format response
+            raw_response = response.choices[0].message.content
+            formatted_response = self._format_response(raw_response)
+            
+            # Maintain conversation history
+            self.conversation_history.extend([
+                {"role": "user", "content": message},
+                {"role": "assistant", "content": formatted_response}
+            ])
+            
+            return formatted_response
+            
+        except Exception as e:
+            print(f"API Error: {str(e)}")
+            return "I'm experiencing technical difficulties. Please try again later."
+
+    def _format_response(self, text):
+        """Format GPT-4o response for better readability"""
+        # Convert markdown to streamlit-friendly format
+        text = re.sub(r"\*\*(.*?)\*\*", r"**\1**", text)  # Preserve bold
+        text = re.sub(r"\*(.*?)\*", r"*\1*", text)        # Preserve italics
+        text = re.sub(r"^-\s+(.*)$", r"• \1", text, flags=re.MULTILINE)  # Bullet points
+        return text
+
     def process_message(self, message, resume_data=None, job_matches=None, **kwargs):
         """
-        Process a message and generate a contextual response
+        Enhanced message processing with GPT-4o
         
         Args:
-            message (str): The user message to respond to
-            resume_data (dict, optional): Resume data for context-aware responses
-            job_matches (list, optional): Job matches for context-aware responses
-            **kwargs: Any additional parameters that might be passed
+            message (str): User message
+            resume_data (dict): Parsed resume data
+            job_matches (list): Job matches from matching engine
             
         Returns:
-            str: The generated response
+            str: Formatted response
         """
-        # Update resume context if provided
+        # Update contexts
         if resume_data:
             self.update_resume_context(resume_data)
             
-        # Determine if the question is job-related
-        job_related_keywords = ["job", "career", "work", "position", "employment", "hiring",
-                               "skills", "interview", "resume", "application"]
-        
-        is_job_related = any(keyword in message.lower() for keyword in job_related_keywords)
-        
-        # Enrich the message with resume and job match context
-        context = ""
-        
-        if resume_data:
-            skills = resume_data.get('skills', [])
-            if skills:
-                context += f"Based on your resume skills: {', '.join(skills)}. "
-        
-        if job_matches:
-            context += f"Considering your {len(job_matches)} job matches. "
-            # Add more details about top matches
-            if len(job_matches) > 0:
-                top_match = job_matches[0]
-                context += f"Your top match is {top_match['job_data']['title']} at {top_match['job_data']['company']} with {top_match['match_score']}% match. "
-        
-        # If job-related but no resume or job matches are available
-        if is_job_related and not resume_data and not job_matches:
-            system_instruction = """
-            You are a career assistant who provides helpful advice about job searching, careers,
-            and professional development. If the user asks about specific job matches or their resume,
-            kindly explain that you don't have that information yet, but you can still provide
-            general career advice and guidance.
-            """
+        # Handle empty resume/job data queries
+        if not resume_data and self._is_job_related(message):
+            return self._handle_no_resume_case(message)
             
-            temp_messages = [
-                {"role": "system", "content": system_instruction},
-                {"role": "user", "content": message}
-            ]
-            
+        return self.generate_response(message, job_matches)
+
+    def _is_job_related(self, text):
+        """Determine if message requires resume/job context"""
+        job_keywords = [
+            'resume', 'cv', 'job', 'career', 'application',
+            'interview', 'skill gap', 'match score', 'hire'
+        ]
+        return any(keyword in text.lower() for keyword in job_keywords)
+
+    def _handle_no_resume_case(self, message):
+        """Handle queries without resume context"""
+        temp_system = """You're a career coach. The user hasn't uploaded a resume yet.
+        Respond to general career questions, but politely suggest uploading a resume
+        for personalized advice when appropriate."""
+        
+        try:
             response = self.client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=temp_messages
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": temp_system},
+                    {"role": "user", "content": message}
+                ],
+                temperature=0.5,
+                max_tokens=300
             )
-            
-            assistant_message = response.choices[0].message.content
-            self.conversation_history.append({"role": "user", "content": message})
-            self.conversation_history.append({"role": "assistant", "content": assistant_message})
-            return assistant_message
-        
-        # Add context to the message if it exists
-        if context:
-            enhanced_message = context + message
-            return self.generate_response(enhanced_message)
-        
-        # Default behavior without additional context
-        return self.generate_response(message)
+            return response.choices[0].message.content
+        except Exception as e:
+            return "I can help with general career advice. For personalized suggestions, please upload your resume first."
