@@ -1,25 +1,59 @@
-# Fichiers sensibles
-.env
-.streamlit/secrets.toml
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# Fichiers générés
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+# Node Modules
+node_modules/
 
-# Environnements virtuels
-venv/
-env/
+# Build output
+dist/
+build/
 
-# Fichiers d'IDE
-.idea/
+# Tailwind Generated Files
+*.css.map
+
+# Environment Variables
+*.env
+.env.local
+.env.*.local
+
+# IDE specific files
 .vscode/
-*.swp
-*.swo
+.idea/
 
-# Fichiers de données
-*.csv
-*.json
-*.xlsx
-deliverable/demo.mp4
+# System specific files
+.DS_Store
+Thumbs.db
+
+# Mac specific files
+*.swp
+._*
+
+# Coverage reports
+coverage/
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional Stylelint cache
+.stylelintcache
+
+# Output of 'npm pack'
+*.tgz
+
+# Temporary files
+*.tmp
+*.temp
+*.next
+
+*venv
