@@ -1,17 +1,18 @@
 import streamlit as st
-import os
-from dotenv import load_dotenv
-from frontend.main import run_streamlit_app
+from backend.openai_client import get_openai_client
 
-# Load environment variables from .env file
-load_dotenv()
+# Charger le client OpenAI avec la clé API depuis les secrets ou .env
+client = get_openai_client()
+
+def main():
+    """Point d'entrée principal de l'application Streamlit."""
+    st.title("CV-LinkedIn Job Matcher")
+
+    # Exemple de test de la clé API
+    try:
+        st.success("✅ Clé API OpenAI chargée avec succès.")
+    except Exception as e:
+        st.error(f"❌ Erreur lors du chargement de la clé API : {str(e)}")
 
 if __name__ == "__main__":
-    # Check if OPENAI_API_KEY exists
-    api_key = os.getenv("OPENAI_API_KEY")  # Corrected syntax
-    if not api_key:
-        st.error("🔑 OpenAI API key not found. Please check your .env file.")
-        st.stop()
-    
-    # Run the Streamlit app
-    run_streamlit_app()
+    main()
