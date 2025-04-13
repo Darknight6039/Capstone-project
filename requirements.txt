@@ -21,7 +21,7 @@ numpy==1.26.4
 
 # Visualization
 plotly==5.18.0
-
+sklearn
 # Networking
 requests==2.31.0
 docx2txt==0.9
