@@ -14,7 +14,8 @@ def get_openai_api_key():
     """Récupère la clé API OpenAI depuis Streamlit secrets ou .env."""
     if "openai" in st.secrets:
         return st.secrets["openai"]["api_key"]
-    else:
+    else: # Fallback pour l'environnement local
+        return os.getenv("OPENAI_API_KEY")
 # OpenAI Settings
 OPENAI_MODEL = "gpt-4o-mini"  # Can be replaced with gpt-3.5-turbo for cost saving
 OPENAI_TEMPERATURE = 0.0  # Lower for more consistent, deterministic outputs
