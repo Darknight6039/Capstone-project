@@ -1,12 +1,16 @@
+import os
 import streamlit as st
-from backend.openai_client import get_openai_client
+from dotenv import load_dotenv
+from frontend.main import run_streamlit_app
 
-# Charger le client OpenAI avec la clé API depuis les secrets ou .env
-client = get_openai_client()
+# Load environment variables
+load_dotenv()
 
-def main():
-    """Point d'entrée principal de l'application Streamlit."""
-    st.title("CV-LinkedIn Job Matcher")
-
+# Main application entry point
 if __name__ == "__main__":
-    main()
+    try:
+        # Run the Streamlit app
+        run_streamlit_app()
+    except Exception as e:
+        st.error(f"Application error: {str(e)}")
+        st.stop()
