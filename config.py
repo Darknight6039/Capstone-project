@@ -11,11 +11,13 @@ ARBEITNOW_API_URL = "https://www.arbeitnow.com/api/job-board-api"
 # Use environment variable and fallback to config only for development
 # Gestion des secrets Streamlit ou fallback sur .env
 def get_openai_api_key():
-    """Récupère la clé API OpenAI depuis Streamlit secrets ou .env."""
     if "openai" in st.secrets:
         return st.secrets["openai"]["api_key"]
-    else: # Fallback pour l'environnement local
-        return os.getenv("OPENAI_API_KEY")
+    return os.getenv("OPENAI_API_KEY")
+
+# Configuration settings
+OPENAI_API_KEY = get_openai_api_key()
+MAX_JOBS_TO_FETCH = 25
 # OpenAI Settings
 OPENAI_MODEL = "gpt-4o-mini"  # Can be replaced with gpt-3.5-turbo for cost saving
 OPENAI_TEMPERATURE = 0.0  # Lower for more consistent, deterministic outputs
